@@ -24,16 +24,14 @@ rosto_feliz = pygame.image.load('Recursos/imagens/rosto_feliz.png').convert_alph
 rosto_medio = pygame.image.load('Recursos/imagens/rosto_machucado.png').convert_alpha()
 rosto_ferido = pygame.image.load('Recursos/imagens/rosto_muito_machucado.png').convert_alpha()
 
-# Redimensionar para caber dentro da moldura
-ROSTO_SIZE = (FRAME_LARGURA - 10, FRAME_ALTURA - 10)  # ajuste a folga se quiser
+ROSTO_SIZE = (FRAME_LARGURA - 10, FRAME_ALTURA - 10)
 rosto_feliz = pygame.transform.scale(rosto_feliz, ROSTO_SIZE)
 rosto_medio = pygame.transform.scale(rosto_medio, ROSTO_SIZE)
 rosto_ferido = pygame.transform.scale(rosto_ferido, ROSTO_SIZE)
 
-# Carregar a moldura como uma animação
 vida_sheet = pygame.image.load('Recursos/imagens/vida.PNG').convert_alpha()
 
-NUM_FRAMES_VIDA = 4  # ajuste de acordo com seu sheet
+NUM_FRAMES_VIDA = 4 
 FRAME_LARGURA = vida_sheet.get_width() // NUM_FRAMES_VIDA
 FRAME_ALTURA = vida_sheet.get_height()
 
@@ -42,7 +40,6 @@ for i in range(NUM_FRAMES_VIDA):
     frame = vida_sheet.subsurface(pygame.Rect(i * FRAME_LARGURA, 0, FRAME_LARGURA, FRAME_ALTURA))
     frames_vida.append(frame)
 
-# --- SPRITESHEET ---
 def carregar_frames(path, num_quadros, escala=1):
     sheet = pygame.image.load(path).convert_alpha()
     largura_frame = sheet.get_width() // num_quadros
@@ -55,10 +52,8 @@ def carregar_frames(path, num_quadros, escala=1):
         frames.append(frame)
     return frames
 
-# Player tiro
 player_tiro_frames = carregar_frames('Recursos/imagens/tiro_sheet.png', 8)
 
-# Boss tiros (maiores)
 boss_tiro1_frames = carregar_frames('Recursos/imagens/tiro1_sheet.png', 8, escala=2)
 boss_tiro2_frames = carregar_frames('Recursos/imagens/tiro2_sheet.png', 8, escala=2)
 boss_tiro3_frames = carregar_frames('Recursos/imagens/tiro3_sheet.png', 8, escala=2)
