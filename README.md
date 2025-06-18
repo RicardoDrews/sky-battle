@@ -10,3 +10,6 @@ Jogo básico feito em Pygame para um projeto de faculdade. O objetivo é control
 * **RA:** 1138132
 
 ---
+### Teste
+**Nome:** Augusto Wolfart Altmayer
+**RA:** 1138100
