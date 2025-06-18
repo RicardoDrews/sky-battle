@@ -21,3 +21,4 @@ COR_BARRA_HP = (200, 50, 50)
 font_title = pygame.font.SysFont('consolas', 48)
 font_ui = pygame.font.SysFont('consolas', 28)
 font_small = pygame.font.SysFont('consolas', 20)
+
