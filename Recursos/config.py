@@ -5,7 +5,7 @@ import math
 import datetime
 import os
 
-LARGURA_TELA, ALTURA_TELA = 1000, 700
+LARGURA, ALTURA = 1000, 700
 FPS = 60
 FRAME_ALTURA = 32
 FRAME_LARGURA = 32

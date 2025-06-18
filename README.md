@@ -1,7 +1,12 @@
-# pygame
-Jogo basico feito em pygame para projeto da faculdade
+# Sky Battle
 
+Jogo básico feito em Pygame para um projeto de faculdade. O objetivo é controlar uma aeronave e derrotar um único e desafiador chefe robô.
 
-Ricardo Drews
-1138132
+---
 
+### Autor
+
+* **Nome:** Ricardo Drews
+* **ID:** 1138132
+
+---
