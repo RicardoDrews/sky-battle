@@ -1,4 +1,4 @@
-# === IMPORTS ===
+
 import pygame
 import sys
 import random
@@ -8,7 +8,7 @@ import os
 import speech_recognition as sr
 import pyttsx3
 
-# === CONFIG ===
+
 LARGURA = 1000
 ALTURA = 700
 FPS = 60
@@ -17,20 +17,19 @@ PLAYER_LARGURA, PLAYER_ALTURA = 100, 80
 BOSS_LARGURA, BOSS_ALTURA = 390, 700
 
 pygame.init()
+pygame.mixer.init() 
+musica =('Recursos/sons/musica.wav')
 tela = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Sky Battle")
 clock = pygame.time.Clock()
 
-# === FONTES E CORES (ESTILO STEAMPUNK) ===
-# --- Cores ---
 COR_BRONZE_ESCURO = (80, 42, 4)
 COR_LATÃO = (205, 127, 50)
 COR_COBRE_HOVER = (218, 165, 32)
 COR_PERGAMINHO = (235, 225, 200)
 COR_TEXTO_ESCURO = (48, 25, 15)
-COR_PAINEL = (48, 25, 15, 200) # Marrom escuro com transparência
+COR_PAINEL = (48, 25, 15, 200) 
 
-# --- Fontes (Requer arquivos .ttf na pasta Recursos/fontes/) ---
 try:
     font_titulo_steampunk = pygame.font.Font('Recursos/fontes/Metamorphous-Regular.ttf', 68)
     font_texto_steampunk = pygame.font.Font('Recursos/fontes/Lora-Regular.ttf', 26)
@@ -43,8 +42,8 @@ except FileNotFoundError:
     font_texto_bold_steampunk = pygame.font.SysFont("serif", 32, bold=True)
     font_input_steampunk = pygame.font.SysFont("serif", 42)
 
-# === RECURSOS STEAMPUNK (IMAGENS) ===
-fundo_menu_img = None # Inicia a variável como None
+
+fundo_menu_img = None
 try:
     fundo_menu_img = pygame.image.load('Recursos/imagens/fundo_menu_steampunk.jpg').convert()
 except FileNotFoundError:
@@ -56,10 +55,10 @@ except FileNotFoundError:
 if fundo_menu_img:
     fundo_menu_img = pygame.transform.scale(fundo_menu_img, (LARGURA, ALTURA))
 
-# === VOZ ===
+
 engine = pyttsx3.init()
 
-# === IMAGENS DO JOGO ===
+
 background = pygame.image.load('Recursos/imagens/background.png').convert()
 background = pygame.transform.scale(background, (LARGURA, ALTURA))
 player_img = pygame.image.load('Recursos/imagens/aviao.png').convert_alpha()
@@ -73,7 +72,7 @@ rosto_medio = pygame.image.load('Recursos/imagens/rosto_machucado.png').convert_
 rosto_ferido = pygame.image.load('Recursos/imagens/rosto_muito_machucado.png').convert_alpha()
 vida_sheet = pygame.image.load('Recursos/imagens/vida.PNG').convert_alpha()
 
-# Configuração do HUD de vida
+
 NUM_FRAMES_VIDA = 4
 FRAME_LARGURA_VIDA = vida_sheet.get_width() // NUM_FRAMES_VIDA
 FRAME_ALTURA_VIDA = vida_sheet.get_height()
@@ -90,7 +89,6 @@ rosto_feliz = pygame.transform.scale(rosto_feliz, ROSTO_SIZE)
 rosto_medio = pygame.transform.scale(rosto_medio, ROSTO_SIZE)
 rosto_ferido = pygame.transform.scale(rosto_ferido, ROSTO_SIZE)
 
-# === TIRO SPRITESHEET ===
 def carregar_frames(path, num_quadros, escala=1):
     sheet = pygame.image.load(path).convert_alpha()
     largura_frame = sheet.get_width() // num_quadros
@@ -108,7 +106,6 @@ boss_tiro1_frames = carregar_frames('Recursos/imagens/tiro1_sheet.png', 8, escal
 boss_tiro2_frames = carregar_frames('Recursos/imagens/tiro2_sheet.png', 8, escala=2)
 boss_tiro3_frames = carregar_frames('Recursos/imagens/tiro3_sheet.png', 8, escala=2)
 
-# === CLASSES DE ATAQUES E DECORAÇÃO ===
 class Moon:
     def __init__(self):
         self.image = moon_img
@@ -123,8 +120,7 @@ class Moon:
             self.scale -= 0.5 * dt
             if self.scale <= 0.8: self.growing = True
     def draw(self, tela):
-        # --- ALTERAÇÃO 1: POSIÇÃO DA LUA ---
-        # A lua agora é desenhada no canto superior esquerdo
+
         size = int(self.base_size * self.scale)
         resized = pygame.transform.scale(self.image, (size, size))
         tela.blit(resized, (20, 20))
@@ -224,7 +220,6 @@ class Laser:
             pygame.draw.rect(tela, self.cor_ativo, self.rect)
             pygame.draw.rect(tela, (255, 255, 255), self.rect, 3)
 
-# === CLASSES DE PERSONAGENS ===
 class Player:
     def __init__(self):
         self.img = player_img
@@ -354,7 +349,6 @@ class Boss:
         for laser in self.lasers:
             laser.draw(tela)
 
-# === CLASSE PRINCIPAL DO JOGO ===
 class Game:
     def __init__(self):
         self.player = Player()
@@ -380,8 +374,6 @@ class Game:
         self.player.atualizar_carga()
         self.boss.atualizar(dt)
         
-        # --- ALTERAÇÃO 2: TIRO SIMULTÂNEO ---
-        # Agora o tiro rápido funciona mesmo enquanto o especial carrega
         if self.player.atirando and pygame.time.get_ticks() - self.player.tempo_ultimo_tiro > 150:
             self.player.atirar()
             self.player.tempo_ultimo_tiro = pygame.time.get_ticks()
@@ -461,21 +453,14 @@ class Game:
         with open("log.dat", "a") as f:
             f.write(f"{data_str};{hora_str};Pontuação: {int(pontuacao)};Tempo: {int(tempo_total)}s\n")
     def mostrar_logs(self):
-        # --- FUNÇÃO ATUALIZADA COM A NOVA BORDA ---
 
-        # 1. Define a área do painel de logs e a centraliza
         painel_rect = pygame.Rect(0, 0, LARGURA - 150, ALTURA - 200)
         painel_rect.center = (LARGURA // 2, ALTURA // 2 + 50)
         
         esperando = True
         while esperando:
-            # 2. Preenche o fundo da tela com uma cor escura sólida
             tela.fill(COR_BRONZE_ESCURO)
-
-            # 3. Desenha o painel com a borda, usando a mesma função dos botões
             desenhar_placa_metalica(tela, painel_rect)
-
-            # 4. Desenha o título e os textos dentro do painel
             titulo = font_titulo_steampunk.render("Registro de Batalhas", True, COR_PERGAMINHO)
             titulo_rect = titulo.get_rect(center=(painel_rect.centerx, painel_rect.top + 50))
             tela.blit(titulo, titulo_rect)
@@ -503,10 +488,7 @@ class Game:
             tela.blit(info_surf, info_rect)
 
             pygame.display.flip()
-
-            # A tela agora fecha por tempo, como antes, mas você pode
-            # adicionar um loop de eventos aqui se preferir que feche com uma tecla.
-            pygame.time.wait(8000) # Aumentei o tempo para 8 segundos
+            pygame.time.wait(8000)
             esperando = False
     def run(self):
         while True:
@@ -547,11 +529,8 @@ class Game:
         
         botao_reiniciar_rect = pygame.Rect(0, 0, 250, 70)
         botao_sair_rect = pygame.Rect(0, 0, 250, 70)
-        
-        # Loop da tela de fim de jogo, esperando uma ação
+
         while True:
-            # --- ALTERAÇÃO AQUI ---
-            # Em vez de desenhar o fundo steampunk, preenchemos a tela com preto.
             tela.fill((0, 0, 0)) 
             
             texto = font_titulo_steampunk.render(msg, True, cor_msg)
@@ -592,7 +571,6 @@ class Game:
                         self.mostrar_logs()
                         return 'sair'
 
-# === FUNÇÕES DE UI (ESTILO STEAMPUNK) ===
 def desenhar_fundo_steampunk(tela):
     if fundo_menu_img:
         tela.blit(fundo_menu_img, (0,0))
@@ -618,7 +596,6 @@ def falar(msg):
         engine.say(msg); engine.runAndWait()
     except Exception: pass
 
-# === TELAS DE MENU ===
 def tela_input_nome():
     nome, ativo = "", True
     cursor_visivel, cursor_timer = True, 0
@@ -674,8 +651,7 @@ def tela_boas_vindas(nome):
             subtitulo_rect = subtitulo.get_rect(center=(painel_rect.centerx, titulo_rect.bottom + 40))
             tela.blit(subtitulo, subtitulo_rect)
             
-            # --- ALTERAÇÃO 3: TEXTO DAS INSTRUÇÕES ---
-            # A linha longa foi dividida em duas para caber no quadro.
+
             instrucoes = [
                 "Navegue com as TECLAS DE SETA ou W/S.",
                 "Pressione F para tiro rápido.",
@@ -685,7 +661,6 @@ def tela_boas_vindas(nome):
                 "Use ESPAÇO para uma pausa tática."
             ]
             y_inicial_instrucoes = subtitulo_rect.bottom + 40
-            # O espaçamento foi ajustado para acomodar a nova linha
             for i, linha in enumerate(instrucoes):
                 linha_surf = font_texto_steampunk.render(linha, True, COR_PERGAMINHO)
                 linha_rect = linha_surf.get_rect(center=(painel_rect.centerx, y_inicial_instrucoes + (i * 38)))
@@ -707,8 +682,11 @@ def tela_boas_vindas(nome):
                 except (sr.WaitTimeoutError, sr.UnknownValueError, sr.RequestError):
                     pass
 
-# === PONTO DE PARTIDA DO JOGO ===
 if __name__ == "__main__":
+    pygame.mixer.music.load(musica)
+    pygame.mixer.music.set_volume(0.07)
+    pygame.mixer.music.play(-1)
+
     nome_jogador = tela_input_nome()
     while True:
         tela_boas_vindas(nome_jogador)
@@ -718,5 +696,6 @@ if __name__ == "__main__":
             break
         elif acao_final == 'reiniciar':
             continue
+        pygame.mixer.music.stop()
     pygame.quit()
     sys.exit()

@@ -7,6 +7,6 @@ Jogo básico feito em Pygame para um projeto de faculdade. O objetivo é control
 ### Autor
 
 * **Nome:** Ricardo Drews
-* **ID:** 1138132
+* **RA:** 1138132
 
 ---
